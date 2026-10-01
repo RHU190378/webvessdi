@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Cambia TU-SITIO.netlify.app por tu dirección real -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://TU-SITIO.netlify.app/</loc></url>
+  <url><loc>https://TU-SITIO.netlify.app/servicios</loc></url>
+  <url><loc>https://TU-SITIO.netlify.app/productos</loc></url>
+  <url><loc>https://TU-SITIO.netlify.app/proyectos</loc></url>
+  <url><loc>https://TU-SITIO.netlify.app/nosotros</loc></url>
+  <url><loc>https://TU-SITIO.netlify.app/contacto</loc></url>
+  <url><loc>https://TU-SITIO.netlify.app/cotizacion</loc></url>
+  <url><loc>https://TU-SITIO.netlify.app/faq</loc></url>
+</urlset>
