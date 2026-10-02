@@ -5,9 +5,8 @@ import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
 import { useAsync } from '../hooks/useAsync'
 import { DEPARTMENTS, waLink } from '../lib/site'
-import { cleanName } from '../lib/utils'
 
-export function QuoteForm({ fromCart = false, allowFile = true }: { fromCart?: boolean; allowFile?: boolean }) {
+export function QuoteForm({ fromCart = false }: { fromCart?: boolean }) {
   const [sp] = useSearchParams()
   const { user, profile } = useAuth()
   const { items } = useCart()
@@ -22,26 +21,18 @@ export function QuoteForm({ fromCart = false, allowFile = true }: { fromCart?: b
     const f = new FormData(e.currentTarget)
     const id = crypto.randomUUID()
     try {
-      let path: string | null = null
-      const file = f.get('file') as File
-      if (file && file.size > 0) {
-        if (file.size > 8 * 1024 * 1024) throw new Error('size')
-        path = `${id}/${Date.now()}-${cleanName(file.name)}`
-        const up = await supabase.storage.from('quote-attachments').upload(path, file)
-        if (up.error) throw up.error
-      }
       const g = (k: string) => String(f.get(k) || '').trim() || null
       const { error } = await supabase.from('quotes').insert({
         id, user_id: user?.id ?? null, full_name: g('full_name'), company: g('company'), phone: g('phone'), whatsapp: g('whatsapp'),
         email: g('email'), city: g('city'), department: g('department'), service_name: g('service_name'),
-        products_interest: g('products_interest'), message: g('message'), budget: g('budget'), attachment_path: path, accepted_contact: true,
+        products_interest: g('products_interest'), message: g('message'), budget: g('budget'), accepted_contact: true,
       })
       if (error) throw error
       if (fromCart && items.length) await supabase.from('quote_items').insert(items.map((i) => ({ quote_id: id, product_id: i.id, product_name: i.name, quantity: i.qty })))
       setDone(String(f.get('service_name') || ''))
     } catch (ex: any) {
       console.error(ex)
-      setErr(ex?.message === 'size' ? 'El archivo es muy grande. El máximo es 8 MB.' : 'No pudimos enviar tu solicitud. Revisa los datos e intenta nuevamente.')
+      setErr('No pudimos enviar tu solicitud. Revisa los datos e intenta nuevamente.')
     }
     setBusy(false)
   }
@@ -72,10 +63,7 @@ export function QuoteForm({ fromCart = false, allowFile = true }: { fromCart?: b
           {(services.data || []).map((s: any) => <option key={s.title}>{s.title}</option>)}<option>Compra de productos</option><option>Otro</option></select></div>
       <div><label htmlFor="q9">Productos de interés</label><input id="q9" name="products_interest" defaultValue={cartText || sp.get('producto') || ''} /></div>
       <div><label htmlFor="q10">Cuéntanos tu necesidad *</label><textarea id="q10" name="message" required /></div>
-      <div className="row">
-        <div><label htmlFor="q11">Presupuesto aproximado (opcional)</label><input id="q11" name="budget" placeholder="Ej.: Bs 5.000" /></div>
-        {allowFile && <div><label htmlFor="q12">Imagen o archivo (opcional, máx. 8 MB)</label><input id="q12" name="file" type="file" accept="image/*,.pdf" /></div>}
-      </div>
+      <div><label htmlFor="q11">Presupuesto aproximado (opcional)</label><input id="q11" name="budget" placeholder="Ej.: Bs 5.000" /></div>
       <div className="check"><label><input type="checkbox" required />Acepto que VESSDI me contacte para responder esta solicitud. *</label></div>
       {err && <div className="msg err" role="alert">{err}</div>}
       <button className="btn btn-accent" disabled={busy}>{busy ? 'Enviando…' : 'Solicitar cotización'}</button>
