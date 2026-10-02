@@ -7,7 +7,7 @@ import { useAsync } from '../hooks/useAsync'
 import { DEPARTMENTS, waLink } from '../lib/site'
 import { cleanName } from '../lib/utils'
 
-export function QuoteForm({ fromCart = false }: { fromCart?: boolean }) {
+export function QuoteForm({ fromCart = false, allowFile = true }: { fromCart?: boolean; allowFile?: boolean }) {
   const [sp] = useSearchParams()
   const { user, profile } = useAuth()
   const { items } = useCart()
@@ -74,7 +74,7 @@ export function QuoteForm({ fromCart = false }: { fromCart?: boolean }) {
       <div><label htmlFor="q10">Cuéntanos tu necesidad *</label><textarea id="q10" name="message" required /></div>
       <div className="row">
         <div><label htmlFor="q11">Presupuesto aproximado (opcional)</label><input id="q11" name="budget" placeholder="Ej.: Bs 5.000" /></div>
-        <div><label htmlFor="q12">Imagen o archivo (opcional, máx. 8 MB)</label><input id="q12" name="file" type="file" accept="image/*,.pdf" /></div>
+        {allowFile && <div><label htmlFor="q12">Imagen o archivo (opcional, máx. 8 MB)</label><input id="q12" name="file" type="file" accept="image/*,.pdf" /></div>}
       </div>
       <div className="check"><label><input type="checkbox" required />Acepto que VESSDI me contacte para responder esta solicitud. *</label></div>
       {err && <div className="msg err" role="alert">{err}</div>}

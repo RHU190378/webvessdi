@@ -62,7 +62,7 @@ export function Contact() {
         <p>Teléfono: <a href={`tel:${SITE.phone}`}>{SITE.phone}</a></p><p>WhatsApp: {SITE.phone}</p><p>Dirección: {SITE.address}, {SITE.country}</p><p>Cobertura: todo Bolivia</p>
         <div className="btns"><a className="btn btn-wa" target="_blank" rel="noopener noreferrer" href={waLink('Hola, VESSDI. Quisiera información sobre sus servicios.')}>Escribir por WhatsApp</a></div>
         <h3 style={{ marginTop: 28 }}>Envíanos un mensaje</h3><ContactForm /></div>
-      <div><h3>Solicitar cotización</h3><QuoteForm /></div>
+      <div><h3>Solicitar cotización</h3><QuoteForm allowFile={false} /></div>
     </div></section>
   </>)
 }

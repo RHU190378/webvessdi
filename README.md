@@ -31,6 +31,9 @@ Copia `.env.example` a `.env`, completa las dos variables, y ejecuta `npm instal
 ## Cómo usar el panel (/admin)
 Crea categorías → productos (guarda y luego sube fotos) → proyectos reales → testimonios y preguntas frecuentes reales. Más usuarios: **Usuarios > Crear usuario**.
 
+## Excel de productos
+En Admin > Productos: **Exportar a Excel**, **Descargar plantilla** e **Importar desde Excel** (el archivo trae una hoja "Instrucciones").
+
 ## Notas
 - El número de WhatsApp usa el código de Bolivia (591): `src/lib/site.ts`.
 - Logo: `public/logo.png` (cabecera, pie y panel) y `public/favicon.png`. Para cambiarlos, reemplaza esos archivos.

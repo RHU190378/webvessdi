@@ -11,6 +11,7 @@ import { Login, Register, Account } from './pages/Account'
 
 const AdminLayout = lazy(() => import('./admin/AdminLayout'))
 const CrudPage = lazy(() => import('./admin/CrudPage'))
+const ProductsAdmin = lazy(() => import('./admin/ProductsExcel'))
 const AdminPages = () => import('./admin/AdminPages')
 const Dashboard = lazy(() => AdminPages().then((m) => ({ default: m.Dashboard })))
 const Orders = lazy(() => AdminPages().then((m) => ({ default: m.Orders })))
@@ -50,7 +51,7 @@ export default function App() {
         <Route path="admin" element={<RequireAdmin />}>
           <Route element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
-            <Route path="productos" element={<CrudPage cfg={C.productsCfg} />} />
+            <Route path="productos" element={<ProductsAdmin />} />
             <Route path="categorias" element={<CrudPage cfg={C.categoriesCfg} />} />
             <Route path="servicios" element={<CrudPage cfg={C.servicesCfg} />} />
             <Route path="proyectos" element={<CrudPage cfg={C.projectsCfg} />} />
