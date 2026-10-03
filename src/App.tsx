@@ -12,6 +12,7 @@ import { Login, Register, Account } from './pages/Account'
 const AdminLayout = lazy(() => import('./admin/AdminLayout'))
 const CrudPage = lazy(() => import('./admin/CrudPage'))
 const ProductsAdmin = lazy(() => import('./admin/ProductsExcel'))
+const ContentAdmin = lazy(() => import('./admin/ContentAdmin'))
 const AdminPages = () => import('./admin/AdminPages')
 const Dashboard = lazy(() => AdminPages().then((m) => ({ default: m.Dashboard })))
 const Orders = lazy(() => AdminPages().then((m) => ({ default: m.Orders })))
@@ -42,10 +43,10 @@ export default function App() {
           <Route path="login" element={<Login />} />
           <Route path="registro" element={<Register />} />
           <Route path="mi-cuenta" element={<Account />} />
-          <Route path="politica-privacidad" element={<Legal title="Política de privacidad" />} />
-          <Route path="terminos-condiciones" element={<Legal title="Términos y condiciones" />} />
-          <Route path="politica-ventas" element={<Legal title="Política de ventas" />} />
-          <Route path="politica-devoluciones" element={<Legal title="Política de devoluciones" />} />
+          <Route path="politica-privacidad" element={<Legal title="Política de privacidad" k="legal.privacy" />} />
+          <Route path="terminos-condiciones" element={<Legal title="Términos y condiciones" k="legal.terms" />} />
+          <Route path="politica-ventas" element={<Legal title="Política de ventas" k="legal.sales" />} />
+          <Route path="politica-devoluciones" element={<Legal title="Política de devoluciones" k="legal.returns" />} />
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="admin" element={<RequireAdmin />}>
@@ -60,6 +61,7 @@ export default function App() {
             <Route path="clientes" element={<Clients />} />
             <Route path="testimonios" element={<CrudPage cfg={C.testimonialsCfg} />} />
             <Route path="faq" element={<CrudPage cfg={C.faqsCfg} />} />
+            <Route path="contenido" element={<ContentAdmin />} />
             <Route path="usuarios" element={<Users />} />
           </Route>
         </Route>

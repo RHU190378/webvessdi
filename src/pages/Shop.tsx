@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../contexts/AuthContext'
 import { DEPARTMENTS, waLink } from '../lib/site'
+import { useC } from '../contexts/ContentContext'
 import { money } from '../lib/utils'
 import { Seo, PageHead, Empty } from '../components/ui'
 import { QuoteForm } from '../components/Forms'
@@ -93,10 +94,11 @@ export function Checkout() {
 }
 
 export function Quote() {
+  const c = useC()
   const fromCart = new URLSearchParams(window.location.search).get('carrito') === '1'
   return (<>
     <Seo title="Solicitar cotización" desc="Cuéntanos qué necesitas y VESSDI preparará una propuesta." />
-    <PageHead title="Solicitar cotización" sub="Cuéntanos qué necesitas y nuestro equipo preparará una propuesta de acuerdo con tu proyecto." />
+    <PageHead title={c('quote.title')} sub={c('quote.sub')} />
     <section className="section"><div className="container" style={{ maxWidth: 800 }}><QuoteForm fromCart={fromCart} /></div></section>
   </>)
 }

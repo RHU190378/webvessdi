@@ -2,14 +2,16 @@ import { Link, useParams } from 'react-router-dom'
 import { supabase, q } from '../lib/supabase'
 import { useAsync } from '../hooks/useAsync'
 import { ICONS, waLink } from '../lib/site'
+import { useC } from '../contexts/ContentContext'
 import { Async, Seo, PageHead, CtaBand, FaqList, Empty } from '../components/ui'
 import { ServiceCard, ProjectCard } from '../components/Cards'
 
 export function Services() {
+  const c = useC()
   const st = useAsync(() => q(supabase.from('services').select('*').eq('active', true).order('sort_order')), [])
   return (<>
     <Seo title="Servicios de seguridad y tecnología" desc="Videovigilancia, alarmas, incendios, cableado estructurado, servidores, firewall, control de acceso y mantenimiento informático en Bolivia." />
-    <PageHead title="Servicios de seguridad y tecnología" sub="Soluciones profesionales para proteger, conectar y mantener tu infraestructura." />
+    <PageHead title={c('services.title')} sub={c('services.sub')} />
     <section className="section"><div className="container"><Async st={st}>{(d) => d.length ? <div className="grid">{d.map((s: any) => <ServiceCard key={s.id} s={s} />)}</div> : <Empty text="Pronto publicaremos nuestros servicios." />}</Async></div></section>
     <CtaBand title="¿No sabes qué servicio necesitas?" text="Cuéntanos tu necesidad y te orientamos." />
   </>)

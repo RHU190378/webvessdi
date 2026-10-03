@@ -3,11 +3,11 @@ import Header from './Header'
 import Footer from './Footer'
 import { SetupWarning, Loading } from './ui'
 import { useAuth } from '../contexts/AuthContext'
-import { waLink } from '../lib/site'
+import { SITE, waLink } from '../lib/site'
 
 export function PublicLayout() {
   return (<><SetupWarning /><Header /><main><Outlet /></main><Footer />
-    <a className="wa-float" href={waLink('Hola, VESSDI. Quisiera información sobre sus servicios.')} target="_blank" rel="noopener noreferrer" aria-label="Escribir por WhatsApp">💬</a></>)
+    <a className="wa-float" href={waLink(SITE.defaultMsg)} target="_blank" rel="noopener noreferrer" aria-label="Escribir por WhatsApp">💬</a></>)
 }
 
 export function RequireAdmin() {

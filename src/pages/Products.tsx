@@ -4,6 +4,7 @@ import { supabase, q } from '../lib/supabase'
 import { useAsync } from '../hooks/useAsync'
 import { useCart } from '../contexts/CartContext'
 import { waLink } from '../lib/site'
+import { useC } from '../contexts/ContentContext'
 import { money } from '../lib/utils'
 import { Async, Seo, PageHead, Empty, Loading, ErrorBox } from '../components/ui'
 import { ProductCard, stockBadge } from '../components/Cards'
@@ -11,6 +12,7 @@ import { ProductCard, stockBadge } from '../components/Cards'
 const PER = 12
 
 export function Products() {
+  const c = useC()
   const { slug } = useParams()
   const nav = useNavigate()
   const [search, setSearch] = useState('')
@@ -40,7 +42,7 @@ export function Products() {
 
   return (<>
     <Seo title="Productos de seguridad y tecnología" desc="Catálogo de equipos de seguridad, videovigilancia, redes y control de acceso." />
-    <PageHead title="Productos" sub="Equipos para tus proyectos de seguridad y tecnología." />
+    <PageHead title={c('products.title')} sub={c('products.sub')} />
     <section className="section"><div className="container">
       <form className="toolbar" onSubmit={(e) => { e.preventDefault(); setTerm(search.trim()) }} role="search">
         <div><label htmlFor="s1" className="sr">Buscar</label><input id="s1" type="search" placeholder="Buscar por nombre o código" value={search} onChange={(e) => setSearch(e.target.value)} /></div>

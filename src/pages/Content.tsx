@@ -2,16 +2,18 @@ import { Link, useParams } from 'react-router-dom'
 import { supabase, q } from '../lib/supabase'
 import { useAsync } from '../hooks/useAsync'
 import { SITE, waLink } from '../lib/site'
+import { useC } from '../contexts/ContentContext'
 import { Async, Seo, PageHead, CtaBand, Empty, FaqList } from '../components/ui'
 import { ProjectCard } from '../components/Cards'
 import { ContactForm, QuoteForm } from '../components/Forms'
 import { useState } from 'react'
 
 export function Projects() {
+  const c = useC()
   const st = useAsync(() => q(supabase.from('projects').select('*, project_images(url,sort_order)').eq('published', true).order('project_date', { ascending: false })), [])
   return (<>
     <Seo title="Proyectos realizados" desc="Trabajos realizados por VESSDI en Bolivia." />
-    <PageHead title="Proyectos" sub="Trabajos realizados por VESSDI." />
+    <PageHead title={c('projects.title')} sub={c('projects.sub')} />
     <section className="section"><div className="container"><Async st={st}>{(d) => d.length ? <div className="grid">{d.map((p: any) => <ProjectCard key={p.id} p={p} />)}</div> : <Empty text="Pronto publicaremos nuestros proyectos." />}</Async></div></section>
     <CtaBand title="¿Tienes un proyecto en mente?" text="Cuéntanos tu necesidad y preparamos una propuesta." />
   </>)
@@ -41,26 +43,26 @@ export function ProjectDetail() {
 }
 
 export function About() {
+  const c = useC()
+  const secs = ['who', 'what', 'diff', 'cover', 'commit']
   return (<>
-    <Seo title="Nosotros" desc="VESSDI: venta de equipos y sistemas de seguridad digital e informática en Bolivia." /><PageHead title="Nosotros" sub={SITE.fullName} />
+    <Seo title="Nosotros" desc="VESSDI: venta de equipos y sistemas de seguridad digital e informática en Bolivia." /><PageHead title="Nosotros" sub={c('about.subtitle')} />
     <section className="section"><div className="container" style={{ maxWidth: 800 }}>
-      <h2>Quiénes somos</h2><p>VESSDI es una empresa boliviana dedicada a la instalación de equipos y sistemas de seguridad digital e informática.</p>
-      <h2>Qué hacemos</h2><p>Instalamos y configuramos sistemas de videovigilancia, detección y alarma contra incendios, alarmas de seguridad, control de acceso, cableado estructurado, servidores y firewall, dimensionamiento e instalación de paneles solares, y brindamos mantenimiento y reparación de equipos de computación.</p>
-      <h2>Nuestro diferencial</h2><p>Trabajo eficiente y garantizado.</p>
-      <h2>Cobertura nacional</h2><p>Atendemos proyectos en todo Bolivia, para personas, comercios, oficinas e instituciones.</p>
-      <h2>Compromiso con el cliente</h2><p>Analizamos tu necesidad, preparamos una propuesta acorde a tu proyecto y te acompañamos hasta la entrega.</p>
+      {c('about.image') && <img src={c('about.image')} alt="VESSDI" style={{ width: '100%', borderRadius: 8, marginBottom: 24 }} />}
+      {secs.map((k) => c(`about.${k}.title`) || c(`about.${k}.text`) ? <div key={k}><h2>{c(`about.${k}.title`)}</h2><p style={{ whiteSpace: 'pre-line' }}>{c(`about.${k}.text`)}</p></div> : null)}
     </div></section>
     <CtaBand title="Conversemos sobre tu proyecto" />
   </>)
 }
 
 export function Contact() {
+  const c = useC()
   return (<>
-    <Seo title="Contacto" desc="Contacta a VESSDI por teléfono, WhatsApp o formulario." /><PageHead title="Contacto" sub="Escríbenos y te responderemos a la brevedad." />
+    <Seo title="Contacto" desc="Contacta a VESSDI por teléfono, WhatsApp o formulario." /><PageHead title={c('contact.title')} sub={c('contact.sub')} />
     <section className="section"><div className="container grid-2">
       <div className="panel"><h3>Datos de contacto</h3>
         <p>Teléfono: <a href={`tel:${SITE.phone}`}>{SITE.phone}</a></p><p>WhatsApp: {SITE.phone}</p><p>Dirección: {SITE.address}, {SITE.country}</p><p>Cobertura: todo Bolivia</p>
-        <div className="btns"><a className="btn btn-wa" target="_blank" rel="noopener noreferrer" href={waLink('Hola, VESSDI. Quisiera información sobre sus servicios.')}>Escribir por WhatsApp</a></div>
+        <div className="btns"><a className="btn btn-wa" target="_blank" rel="noopener noreferrer" href={waLink(SITE.defaultMsg)}>Escribir por WhatsApp</a></div>
         <h3 style={{ marginTop: 28 }}>Envíanos un mensaje</h3><ContactForm /></div>
       <div><h3>Solicitar cotización</h3><QuoteForm /></div>
     </div></section>
@@ -68,16 +70,18 @@ export function Contact() {
 }
 
 export function Faq() {
+  const c = useC()
   const st = useAsync(() => q(supabase.from('faqs').select('*').eq('active', true).order('sort_order')), [])
   return (<>
-    <Seo title="Preguntas frecuentes" /><PageHead title="Preguntas frecuentes" />
+    <Seo title="Preguntas frecuentes" /><PageHead title={c('faq.title')} />
     <section className="section"><div className="container" style={{ maxWidth: 800 }}><Async st={st}>{(d) => d.length ? <FaqList items={d} /> : <Empty text="Pronto publicaremos las preguntas frecuentes." action={<Link className="btn btn-outline" to="/contacto">Contáctanos</Link>} />}</Async></div></section>
   </>)
 }
 
-export function Legal({ title }: { title: string }) {
+export function Legal({ title, k }: { title: string; k: string }) {
+  const c = useC()
   return (<><Seo title={title} /><PageHead title={title} /><section className="section"><div className="container" style={{ maxWidth: 800 }}>
-    <div className="msg info">Contenido provisional: pendiente de revisión y aprobación del propietario de VESSDI. Aquí se publicará el texto definitivo.</div>
+    {c(k).split(/\n\s*\n/).map((p, i) => <p key={i} style={{ whiteSpace: 'pre-line' }}>{p}</p>)}
   </div></section></>)
 }
 

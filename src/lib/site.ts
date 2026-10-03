@@ -6,6 +6,7 @@ export const SITE = {
   waNumber: '59176015484', // 591 = código de Bolivia
   address: 'Barrio Las Américas, c/ Perú c/9',
   country: 'Bolivia',
+  defaultMsg: 'Hola, VESSDI. Quisiera información sobre sus servicios.',
 }
 export const waLink = (msg: string) => `https://wa.me/${SITE.waNumber}?text=${encodeURIComponent(msg)}`
 export const DEPARTMENTS = ['La Paz','Cochabamba','Santa Cruz','Oruro','Potosí','Chuquisaca','Tarija','Beni','Pando']
