@@ -25,7 +25,7 @@ export function QuoteForm({ fromCart = false }: { fromCart?: boolean }) {
       const { error } = await supabase.from('quotes').insert({
         id, user_id: user?.id ?? null, full_name: g('full_name'), company: g('company'), phone: g('phone'), whatsapp: g('whatsapp'),
         email: g('email'), city: g('city'), department: g('department'), service_name: g('service_name'),
-        products_interest: g('products_interest'), message: g('message'), budget: g('budget'), accepted_contact: true,
+        products_interest: cartText || sp.get('producto') || null, message: g('message'), budget: g('budget'), accepted_contact: true,
       })
       if (error) throw error
       if (fromCart && items.length) await supabase.from('quote_items').insert(items.map((i) => ({ quote_id: id, product_id: i.id, product_name: i.name, quantity: i.qty })))
@@ -61,7 +61,6 @@ export function QuoteForm({ fromCart = false }: { fromCart?: boolean }) {
       <div><label htmlFor="q8">Servicio solicitado</label>
         <select id="q8" name="service_name" defaultValue={sp.get('servicio') || ''}><option value="">Selecciona…</option>
           {(services.data || []).map((s: any) => <option key={s.title}>{s.title}</option>)}<option>Compra de productos</option><option>Otro</option></select></div>
-      <div><label htmlFor="q9">Productos de interés</label><input id="q9" name="products_interest" defaultValue={cartText || sp.get('producto') || ''} /></div>
       <div><label htmlFor="q10">Cuéntanos tu necesidad *</label><textarea id="q10" name="message" required /></div>
       <div><label htmlFor="q11">Presupuesto aproximado (opcional)</label><input id="q11" name="budget" placeholder="Ej.: Bs 5.000" /></div>
       <div className="check"><label><input type="checkbox" required />Acepto que VESSDI me contacte para responder esta solicitud. *</label></div>
