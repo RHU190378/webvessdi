@@ -24,30 +24,6 @@ export function Login() {
       <div><label htmlFor="l2">Contraseña</label><input id="l2" name="password" type="password" required autoComplete="current-password" /></div>
       {err && <div className="msg err" role="alert">{err}</div>}
       <button className="btn btn-primary" disabled={busy}>{busy ? 'Ingresando…' : 'Ingresar'}</button>
-      <p style={{ margin: 0 }}>¿No tienes cuenta? <Link to="/registro">Regístrate</Link></p>
-    </form></div></section></>)
-}
-
-export function Register() {
-  const { user, loading } = useAuth()
-  const [err, setErr] = useState(''); const [info, setInfo] = useState(''); const [busy, setBusy] = useState(false)
-  if (!loading && user) return <Navigate to="/mi-cuenta" replace />
-  async function submit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault(); setErr(''); setInfo(''); setBusy(true)
-    const f = new FormData(e.currentTarget)
-    const { data, error } = await supabase.auth.signUp({ email: String(f.get('email')), password: String(f.get('password')), options: { data: { full_name: String(f.get('name')) } } })
-    setBusy(false)
-    if (error) setErr(error.message.includes('registered') ? 'Ese correo ya tiene una cuenta.' : 'No pudimos crear tu cuenta. La contraseña debe tener al menos 6 caracteres.')
-    else if (!data.session) setInfo('Cuenta creada. Revisa tu correo para confirmarla y luego ingresa.')
-  }
-  return (<><Seo title="Crear cuenta" /><PageHead title="Crear cuenta" /><section className="section"><div className="container" style={{ maxWidth: 440 }}>
-    <form className="form panel" onSubmit={submit}>
-      <div><label htmlFor="r1">Nombre completo</label><input id="r1" name="name" required autoComplete="name" /></div>
-      <div><label htmlFor="r2">Correo</label><input id="r2" name="email" type="email" required autoComplete="email" /></div>
-      <div><label htmlFor="r3">Contraseña (mínimo 6 caracteres)</label><input id="r3" name="password" type="password" minLength={6} required autoComplete="new-password" /></div>
-      {err && <div className="msg err" role="alert">{err}</div>}{info && <div className="msg ok" role="status">{info}</div>}
-      <button className="btn btn-primary" disabled={busy}>{busy ? 'Creando…' : 'Crear cuenta'}</button>
-      <p style={{ margin: 0 }}>¿Ya tienes cuenta? <Link to="/login">Ingresar</Link></p>
     </form></div></section></>)
 }
 

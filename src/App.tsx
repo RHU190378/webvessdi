@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { PublicLayout, RequireAdmin } from './components/Layout'
 import { Loading } from './components/ui'
 import Home from './pages/Home'
@@ -7,7 +7,7 @@ import { Services, ServiceDetail } from './pages/Services'
 import { Products, ProductDetail } from './pages/Products'
 import { Cart, Checkout, Quote } from './pages/Shop'
 import { Projects, ProjectDetail, About, Contact, Faq, Legal, NotFound } from './pages/Content'
-import { Login, Register, Account } from './pages/Account'
+import { Login, Account } from './pages/Account'
 
 const AdminLayout = lazy(() => import('./admin/AdminLayout'))
 const CrudPage = lazy(() => import('./admin/CrudPage'))
@@ -41,7 +41,7 @@ export default function App() {
           <Route path="contacto" element={<Contact />} />
           <Route path="faq" element={<Faq />} />
           <Route path="login" element={<Login />} />
-          <Route path="registro" element={<Register />} />
+          <Route path="registro" element={<Navigate to="/login" replace />} />
           <Route path="mi-cuenta" element={<Account />} />
           <Route path="politica-privacidad" element={<Legal title="Política de privacidad" k="legal.privacy" />} />
           <Route path="terminos-condiciones" element={<Legal title="Términos y condiciones" k="legal.terms" />} />
