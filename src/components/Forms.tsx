@@ -5,11 +5,14 @@ import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
 import { useAsync } from '../hooks/useAsync'
 import { DEPARTMENTS, waLink } from '../lib/site'
+import { useC } from '../contexts/ContentContext'
+import { notifyEmail } from '../lib/notify'
 
 export function QuoteForm({ fromCart = false }: { fromCart?: boolean }) {
   const [sp] = useSearchParams()
   const { user, profile } = useAuth()
   const { items } = useCart()
+  const c = useC()
   const services = useAsync(async () => (await supabase.from('services').select('title').eq('active', true).order('sort_order')).data || [], [])
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')
@@ -29,6 +32,11 @@ export function QuoteForm({ fromCart = false }: { fromCart?: boolean }) {
       })
       if (error) throw error
       if (fromCart && items.length) await supabase.from('quote_items').insert(items.map((i) => ({ quote_id: id, product_id: i.id, product_name: i.name, quantity: i.qty })))
+      notifyEmail(c('notify.email'), `Nueva solicitud de cotización: ${g('full_name')}`, {
+        'Nombre completo': g('full_name'), 'Empresa': g('company'), 'Teléfono': g('phone'), 'WhatsApp': g('whatsapp'),
+        'Correo electrónico': g('email'), 'Departamento': g('department'), 'Ciudad': g('city'), 'Servicio solicitado': g('service_name'),
+        'Productos': cartText || sp.get('producto'), 'Necesidad': g('message'), 'Presupuesto aproximado': g('budget'),
+      }, g('email'))
       setDone(String(f.get('service_name') || ''))
     } catch (ex: any) {
       console.error(ex)
@@ -71,6 +79,7 @@ export function QuoteForm({ fromCart = false }: { fromCart?: boolean }) {
 }
 
 export function ContactForm() {
+  const c = useC()
   const [busy, setBusy] = useState(false)
   const [ok, setOk] = useState(false)
   const [err, setErr] = useState('')
@@ -83,6 +92,9 @@ export function ContactForm() {
     })
     setBusy(false)
     if (error) { console.error(error); setErr('No pudimos enviar tu mensaje. Intenta nuevamente.'); return }
+    notifyEmail(c('notify.email'), `Nuevo mensaje de contacto: ${String(f.get('name'))}`, {
+      'Nombre': String(f.get('name')), 'Correo electrónico': String(f.get('email') || ''), 'Teléfono': String(f.get('phone') || ''), 'Mensaje': String(f.get('message')),
+    }, String(f.get('email') || ''))
     setOk(true)
   }
   if (ok) return <div className="panel msg ok" role="status">Mensaje enviado. VESSDI te responderá pronto.</div>

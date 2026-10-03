@@ -31,6 +31,7 @@ export const DEFAULTS: CField[] = [
   f(G, 'site.address', 'Dirección', 'Barrio Las Américas, c/ Perú c/9'),
   f(G, 'site.country', 'País', 'Bolivia'),
   f(G, 'site.footer_text', 'Texto del pie de página', 'Soluciones de seguridad digital e informática para hogares, comercios y empresas.', 'textarea'),
+  f(G, 'notify.email', 'Correo que recibe las cotizaciones y mensajes de contacto', 'rene_hoyos@hotmail.com'),
   f(G, 'site.copyright', 'Derechos reservados (pie de página)', '© VESSDI. Todos los derechos reservados.'),
 
   f(H, 'home.hero.image', 'Imagen de fondo del banner principal (opcional)', '', 'image'),
